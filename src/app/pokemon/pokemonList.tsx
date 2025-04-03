@@ -1,10 +1,9 @@
 import React from "react";
 import { Pokemon, SpriteValue } from "./types";
 import PokemonCard from "./pokemonCard";
-import Shimmer from "../shimmer";
 
 interface PokemonListProps {
-  pokemon: Pokemon | null;
+  pokemon: Pokemon;
 }
 
 const PokemonList = ({ pokemon }: PokemonListProps) => {
@@ -30,9 +29,7 @@ const PokemonList = ({ pokemon }: PokemonListProps) => {
     });
   };
 
-  return (
-    <div>{pokemon?.sprites ? renderSprite(pokemon.sprites) : <Shimmer />}</div>
-  );
+  return <div>{renderSprite(pokemon.sprites)}</div>;
 };
 
 export default PokemonList;
