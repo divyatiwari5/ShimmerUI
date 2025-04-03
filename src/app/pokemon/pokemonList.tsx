@@ -1,18 +1,14 @@
-import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { Pokemon, SpriteValue } from "./types";
+import { ISprite, Pokemon, SpriteValue } from "./types";
+import PokemonCard from "./pokemonCard";
+import Shimmer from "../shimmer";
 
 interface PokemonListProps {
   pokemon: Pokemon | null;
 }
 
-interface ISprite {
-  image: string;
-  pokemonName: string;
-}
-
 const PokemonList = ({ pokemon }: PokemonListProps) => {
-  const [sprites, setSprites] = useState<ISprite[]>([]);
+  const [sprites, setSprites] = useState<ISprite[] | null>(null);
 
   useEffect(() => {
     if (pokemon) {
@@ -40,24 +36,19 @@ const PokemonList = ({ pokemon }: PokemonListProps) => {
 
     calculateSprite(pokemon.sprites);
     setSprites(formattedSprites);
-
-    console.log(formattedSprites, sprites);
   };
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      {sprites.map((sprite, i) => (
-        <div key={i}>
-          <p>{sprite.pokemonName}</p>
-
-          <Image
-            src={sprite.image}
-            alt={sprite.pokemonName}
-            width={50}
-            height={50}
-          />
-        </div>
-      ))}
+      {sprites ? (
+        <>
+          {sprites.map((sprite, i) => (
+            <PokemonCard sprite={sprite} key={i} />
+          ))}
+        </>
+      ) : (
+        <Shimmer />
+      )}
     </div>
   );
 };

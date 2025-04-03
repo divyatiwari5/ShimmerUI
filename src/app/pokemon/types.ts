@@ -5,3 +5,8 @@ export interface Pokemon {
     [key: string]: SpriteValue;
   };
 }
+
+export interface ISprite {
+  image: string;
+  pokemonName: string;
+}
