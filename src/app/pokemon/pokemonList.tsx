@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ISprite, Pokemon, SpriteValue } from "./types";
+import React from "react";
+import { Pokemon, SpriteValue } from "./types";
 import PokemonCard from "./pokemonCard";
 import Shimmer from "../shimmer";
 
@@ -8,48 +8,30 @@ interface PokemonListProps {
 }
 
 const PokemonList = ({ pokemon }: PokemonListProps) => {
-  const [sprites, setSprites] = useState<ISprite[] | null>(null);
-
-  useEffect(() => {
-    if (pokemon) {
-      fetchSprites(pokemon);
-    }
-  }, [pokemon]);
-
-  const fetchSprites = (pokemon: Pokemon) => {
-    const formattedSprites: ISprite[] = [];
-
-    const calculateSprite = (spriteData: { [key: string]: SpriteValue }) => {
-      if (!spriteData) return;
-
-      Object.entries(spriteData).forEach(([key, value]) => {
-        if (typeof value === "string" && value !== null) {
-          formattedSprites.push({
-            image: value,
-            pokemonName: key,
-          });
-        } else if (value && typeof value === "object") {
-          calculateSprite(value as { [key: string]: SpriteValue });
-        }
-      });
-    };
-
-    calculateSprite(pokemon.sprites);
-    setSprites(formattedSprites);
+  const renderSprite = (sprites: SpriteValue) => {
+    if (!sprites) return null;
+    return Object.entries(sprites).map(([key, value], i) => {
+      if (typeof value === "string" && value !== null) {
+        return (
+          <PokemonCard
+            sprite={{ image: value, pokemonName: key }}
+            key={key + i}
+          />
+        );
+      } else if (value && typeof value === "object") {
+        return (
+          <div key={key + i} className="mb-8">
+            <p className="text-xs font-bold uppercase mb-2">{key}</p>
+            <div className="flex flex-row flex-wrap gap-4">{renderSprite(value)}</div>
+          </div>
+        );
+      }
+      return null;
+    });
   };
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {sprites ? (
-        <>
-          {sprites.map((sprite, i) => (
-            <PokemonCard sprite={sprite} key={i} />
-          ))}
-        </>
-      ) : (
-        <Shimmer />
-      )}
-    </div>
+    <div>{pokemon?.sprites ? renderSprite(pokemon.sprites) : <Shimmer />}</div>
   );
 };
 
