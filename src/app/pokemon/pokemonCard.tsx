@@ -7,7 +7,7 @@ interface PokemonCardProps {
 }
 const PokemonCard = ({ sprite }: PokemonCardProps) => {
   return (
-    <div className="border border-gray-300 rounded-md p-2 shadow-md h-24 w-[150px]">
+    <div className="border border-gray-300 rounded-md p-2 shadow-md h-24 w-[150px] m-1">
       <p className="text-xs font-bold uppercase">{sprite.pokemonName}</p>
 
       <Image
